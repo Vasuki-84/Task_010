@@ -1,0 +1,12 @@
+RewriteEngine On
+
+RewriteBase /task_010/
+
+# Skip existing files
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Skip existing directories
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirect all requests to public/index.php
+RewriteRule ^(.*)$ public/index.php [QSA,L]
