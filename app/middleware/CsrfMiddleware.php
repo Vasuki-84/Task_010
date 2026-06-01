@@ -7,18 +7,12 @@ class CsrfMiddleware
         if (session_status() === PHP_SESSION_NONE) {
            session_start();
         }    
-
         $headers = getallheaders();
-
-        $csrfToken =
-            $headers['X-CSRF-Token'] ?? '';
+        $csrfToken = $headers['X-CSRF-Token'] ?? '';
 
         if (
             empty($_SESSION['csrf_token']) ||
-            !hash_equals(
-                $_SESSION['csrf_token'],
-                $csrfToken
-            )
+            !hash_equals( $_SESSION['csrf_token'], $csrfToken)
         ) {
 
             http_response_code(403);

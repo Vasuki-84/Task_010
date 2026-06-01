@@ -18,11 +18,15 @@ class PatientController
 
         $userId = $_REQUEST['user']['user_id'];
 
-        $patients =
-            $this->patientModel->getAll($userId);
+        $patients = $this->patientModel->getAll($userId);
 
         // Decrypt sensitive fields
         foreach ($patients as &$patient) {
+
+             $patient['name'] =
+                Encryption::decrypt(
+                    $patient['name']
+                );
 
             $patient['phone'] =
                 Encryption::decrypt(
@@ -55,8 +59,7 @@ class PatientController
 
         $data = $_REQUEST['body'];
 
-        $data['user_id'] =
-            $_REQUEST['user']['user_id'];
+        $data['user_id'] = $_REQUEST['user']['user_id'];
 
         if (
             empty($data['name']) ||
@@ -78,6 +81,12 @@ class PatientController
         }
 
         // Encrypt sensitive fields
+        
+         $data['name'] =
+            Encryption::encrypt(
+                $data['name']
+            );
+
         $data['phone'] =
             Encryption::encrypt(
                 $data['phone']
@@ -125,14 +134,9 @@ class PatientController
 
         $data = $_REQUEST['body'];
 
-        $userId =
-            $_REQUEST['user']['user_id'];
+        $userId = $_REQUEST['user']['user_id'];
 
-        $patient =
-            $this->patientModel->findById(
-                $id,
-                $userId
-            );
+        $patient = $this->patientModel->findById( $id, $userId );
 
         if (!$patient) {
 
@@ -147,6 +151,15 @@ class PatientController
         }
 
         // Encrypt sensitive fields
+
+        if (isset($data['name'])) {
+
+            $data['name'] =
+                Encryption::encrypt(
+                    $data['name']
+                );
+        }
+
         if (isset($data['phone'])) {
 
             $data['phone'] =
@@ -172,10 +185,7 @@ class PatientController
         }
 
         $updated =
-            $this->patientModel->update(
-                $id,
-                $data
-            );
+            $this->patientModel->update( $id, $data );
 
         if ($updated) {
 
@@ -204,14 +214,10 @@ class PatientController
     {
         AuthMiddleware::handle();
 
-        $userId =
-            $_REQUEST['user']['user_id'];
+        $userId = $_REQUEST['user']['user_id'];
 
         $patient =
-            $this->patientModel->findById(
-                $id,
-                $userId
-            );
+            $this->patientModel->findById($id, $userId );
 
         if (!$patient) {
 

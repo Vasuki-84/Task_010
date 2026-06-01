@@ -1,17 +1,23 @@
 <?php
 
 class Encryption
-{
+{   
+    // Define Encryption algorithm:
+
+    // AES - Advanced Encryption Standard
+    // 256 - 32 byte secret key
+    // CBC - Cipher Block Chaining mode
     private static $cipher = "AES-256-CBC";
 
     public static function encrypt($data)
     {
         $key = $_ENV['ENCRYPTION_KEY'];
-
+        // finds IV length based on the cipher method
         $ivLength = openssl_cipher_iv_length(
+           // self refers to the current class, since the method is static we cannot use $this
             self::$cipher
         );
-
+        // IV = Initialization Vector
         $iv = random_bytes($ivLength);
 
         $encrypted = openssl_encrypt(
@@ -22,9 +28,7 @@ class Encryption
             $iv
         );
 
-        return base64_encode(
-            $iv . $encrypted
-        );
+        return base64_encode($iv . $encrypted);
     }
 
     public static function decrypt($data)
