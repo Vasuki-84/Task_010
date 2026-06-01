@@ -148,8 +148,7 @@ class AuthController
     }
 
     public function refresh(){
-    $refreshToken =
-        $_COOKIE['refresh_token'] ?? null;
+    $refreshToken = $_COOKIE['refresh_token'] ?? null;
 
     if (!$refreshToken) {
 
@@ -163,13 +162,10 @@ class AuthController
         return;
     }
 
-    $user = $this->userModel
-        ->findByRefreshToken($refreshToken);
+    $user = $this->userModel ->findByRefreshToken($refreshToken);
 
     if (!$user) {
-
         http_response_code(401);
-
         echo json_encode([
             "status" => false,
             "message" => "Invalid or expired refresh token"
@@ -192,45 +188,36 @@ class AuthController
     // LOGOUT user
     public function logout()
 {
-    $refreshToken =
-        $_COOKIE['refresh_token'] ?? null;
+    $refreshToken = $_COOKIE['refresh_token'] ?? null;
 
     if (!$refreshToken) {
 
         http_response_code(401);
-
         echo json_encode([
             "status" => false,
             "message" => "Refresh token missing"
         ]);
-
         return;
     }
 
     // Find user using refresh token
-    $user = $this->userModel
-        ->findByRefreshToken($refreshToken);
+    $user = $this->userModel ->findByRefreshToken($refreshToken);
 
     if (!$user) {
 
         http_response_code(401);
-
         echo json_encode([
             "status" => false,
             "message" => "Invalid refresh token"
         ]);
-
         return;
     }
 
     // Remove refresh token from database
-    $this->userModel
-        ->removeRefreshToken($user['id']);
+    $this->userModel ->removeRefreshToken($user['id']);
 
     // Remove refresh token cookie
-    setcookie(
-        "refresh_token",
-        "",
+    setcookie( "refresh_token", "",
         [
             "expires" => time() - 3600,
             "path" => "/",

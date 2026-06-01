@@ -27,26 +27,26 @@ class Encryption
             OPENSSL_RAW_DATA,
             $iv
         );
-
+        //  IV + Binary Encrypted Data, then encode in base64 for storage
         return base64_encode($iv . $encrypted);
     }
 
     public static function decrypt($data)
     {
         $key = $_ENV['ENCRYPTION_KEY'];
-
+        // IV + Binary Encrypted Data
         $decoded = base64_decode($data);
-
+        // find IV length based on the cipher method
         $ivLength = openssl_cipher_iv_length(
             self::$cipher
         );
-
+        // extract IV = extracts 0-16 characters
         $iv = substr(
             $decoded,
             0,
             $ivLength
         );
-
+        // cipher text = extracts characters after 16 to end
         $encrypted = substr(
             $decoded,
             $ivLength
@@ -56,7 +56,7 @@ class Encryption
             $encrypted,
             self::$cipher,
             $key,
-            OPENSSL_RAW_DATA,
+            OPENSSL_RAW_DATA,   // data is in raw binary format
             $iv
         );
     }

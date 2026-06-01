@@ -92,8 +92,7 @@ class Patient
     // =========================
     public function delete($id)
     {
-        $query = "DELETE FROM {$this->table}
-                  WHERE id = ?";
+        $query = "DELETE FROM {$this->table} WHERE id = ?";
 
         $stmt = mysqli_prepare(
             $this->conn,

@@ -23,7 +23,7 @@ class PatientController
         // Decrypt sensitive fields
         foreach ($patients as &$patient) {
 
-             $patient['name'] =
+            $patient['name'] =
                 Encryption::decrypt(
                     $patient['name']
                 );
@@ -216,8 +216,7 @@ class PatientController
 
         $userId = $_REQUEST['user']['user_id'];
 
-        $patient =
-            $this->patientModel->findById($id, $userId );
+        $patient =  $this->patientModel->findById($id, $userId );
 
         if (!$patient) {
 
@@ -231,8 +230,7 @@ class PatientController
             return;
         }
 
-        $deleted =
-            $this->patientModel->delete($id);
+        $deleted =  $this->patientModel->delete($id);
 
         if ($deleted) {
 
