@@ -98,10 +98,15 @@ $router->add(
 
 if (
     in_array(
+        $_SERVER['REQUEST_METHOD'],
+        ['POST', 'PUT', 'DELETE','GET']
+    )
+    &&
+    !in_array(
         $requestUri,
         [
-            '/api/token/refresh',
-            '/api/logout'
+            '/api/login',
+            '/api/register'
         ]
     )
 ) {
